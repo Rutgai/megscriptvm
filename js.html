@@ -9,6 +9,12 @@
 <link rel="stylesheet" href="stil.css">
 <script src="tema.js"></script>
 <style>
+  /* stil.css yoksa da (sayfa tek başına açılınca) panelin koyu teması: yedek değerler */
+  :root {
+    --zemin: #0b0a0f; --zemin-2: #0f0e15; --yazi: #efedf5; --yazi-2: #b9b6c8; --koz: #f2b54a;
+    --koz-ince: rgba(242, 181, 74, .12); --koz-cizgi: rgba(242, 181, 74, .35);
+    --yazi-tipi: "Segoe UI Variable Text", "Segoe UI", "Inter", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  }
   body { background: var(--zemin); color: var(--yazi); font-family: var(--yazi-tipi); margin: 0; }
   .kd { max-width: 980px; margin: 0 auto; padding: 32px 16px 64px; }
   .kd header { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
@@ -66,7 +72,7 @@
   <div class="araclar">
     <button type="button" data-dil="en">English</button>
     <button type="button" data-dil="tr">Türkçe</button>
-    <small id="durum"></small>
+    <small id="durum">Demo yüklenemedi: sayfa dosyadan (file://) açıldıysa tarayıcı JavaScript modüllerini yüklemez; siteden aç.</small>
   </div>
   <div class="deneme">
     <textarea id="kaynak" spellcheck="false" aria-label="megscript kaynak kodu">--! lang=tr
