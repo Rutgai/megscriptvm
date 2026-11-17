@@ -2,73 +2,21 @@
 <html lang="tr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MegscriptVM</title>
-<meta name="description" content="MegscriptVM: kodunu yaz, bulutun 7/24 çalıştırsın.">
-<link rel="icon" href="simge.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>megscriptvm JavaScript — 404</title>
 <style>
-  :root { --zemin:#09090d; --kart:#14131a; --cizgi:#2a2733; --yazi:#e8e2d6; --soluk:#9a948a; --altin:#f2b54a; }
-  @media (prefers-color-scheme: light) { :root { --zemin:#f6f3ee; --kart:#ffffff; --cizgi:#e4ded3; --yazi:#1d1a14; --soluk:#6f6a61; --altin:#c4801f; } }
-  * { box-sizing:border-box; }
-  body { margin:0; min-height:100vh; display:grid; place-items:center; padding:16px; background:var(--zemin);
-         background-image:radial-gradient(ellipse at top, rgba(242,181,74,.14), transparent 60%);
-         color:var(--yazi); font:15px/1.6 "Segoe UI",Roboto,Helvetica,Arial,sans-serif; }
-  .kart { width:100%; max-width:420px; background:var(--kart); border:1px solid var(--cizgi); border-radius:20px;
-          padding:32px 28px; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,.25); }
-  img { width:64px; height:64px; }
-  h1 { margin:12px 0 4px; font-size:24px; }
-  p { margin:0; color:var(--soluk); }
-  .doner { width:28px; height:28px; margin:22px auto 12px; border:3px solid var(--cizgi); border-top-color:var(--altin);
-           border-radius:50%; animation:don 0.9s linear infinite; }
-  @keyframes don { to { transform:rotate(360deg); } }
-  .kapali { margin-top:16px; padding:12px 14px; border-radius:12px; border:1px solid var(--cizgi); font-size:13px; }
-  a { color:var(--altin); }
-  small { display:block; margin-top:22px; font-size:12px; color:var(--soluk); }
+  :root { --zemin:#0b0a0f; --yazi:#efedf5; --soluk:#b9b6c8; --koz:#f2b54a; }
+  @media (prefers-color-scheme: light) { :root { --zemin:#f6f3ee; --yazi:#1d1a14; --soluk:#6f6a61; --koz:#c4801f; } }
+  body { margin:0; min-height:100vh; display:grid; place-items:center; padding:16px; background:var(--zemin); color:var(--yazi);
+         font:16px/1.6 "Segoe UI",system-ui,sans-serif; text-align:center; }
+  p { color:var(--soluk); } a { color:var(--koz); }
 </style>
 </head>
 <body>
-<main class="kart">
-  <img id="simge" alt="">
-  <h1>MegscriptVM</h1>
-  <p>Kodunu yaz, bulutun 7/24 çalıştırsın.</p>
-  <div class="doner"></div>
-  <p id="durum">Sunucuya bağlanılıyor…</p>
-  <div class="kapali" id="kapali" hidden>Sunucu şu an kapalı ya da yeniden başlıyor. Sayfa kendiliğinden yeniden dener.</div>
-  <small><a id="jsBag">megscriptvm-js kütüphanesi</a> · © MegscriptStudio</small>
+<main>
+  <h1>404</h1>
+  <p>Bu sayfa bulunamadı. / Page not found.</p>
+  <p><a href="/">megscriptvm JavaScript kütüphanesi / library</a></p>
 </main>
-<script>
-(() => {
-  // Hem rutgai.github.io/megscriptvm/ (alt klasör) hem özel alan adı (kök) altında çalışır.
-  const KOK = location.hostname.endsWith("github.io") ? "/megscriptvm" : "";
-  document.getElementById("simge").src = KOK + "/simge.png";
-  document.getElementById("jsBag").href = KOK + "/js.html";
-  function hedefYol() {
-    let y = location.pathname;
-    if (KOK && y.startsWith(KOK)) y = y.slice(KOK.length);
-    if (y === "" || y === "/index.html" || y === "/404.html") y = "/";
-    return y + location.search + location.hash;
-  }
-  async function adresAl() {
-    const r = await fetch(KOK + "/adres.json?t=" + Date.now(), { cache: "no-store" });
-    const j = await r.json();
-    return /^https:\/\/[a-z0-9.-]+$/.test(j.adres || "") ? j.adres : null;
-  }
-  async function ulasilir(adres) {
-    const k = new AbortController(); const z = setTimeout(() => k.abort(), 8000);
-    try { await fetch(adres + "/simge.png?t=" + Date.now(), { mode: "no-cors", cache: "no-store", signal: k.signal }); return true; }
-    catch (e) { return false; } finally { clearTimeout(z); }
-  }
-  async function dene() {
-    try {
-      const adres = await adresAl();
-      if (adres && await ulasilir(adres)) { location.replace(adres + hedefYol()); return; }
-    } catch (e) { /* aşağıda yeniden denenir */ }
-    document.getElementById("kapali").hidden = false;
-    document.getElementById("durum").textContent = "Bağlanılamadı; 15 saniye sonra yeniden denenecek.";
-    setTimeout(dene, 15000);
-  }
-  dene();
-})();
-</script>
 </body>
 </html>
