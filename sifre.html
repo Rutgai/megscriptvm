@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="referrer" content="no-referrer">
+<title>Şifre sıfırlama · MegscriptVM</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23ffd98a'/%3E%3Cstop offset='1' stop-color='%23e3892b'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='40' height='40' rx='10' fill='%230c0b10'/%3E%3Ccircle cx='20' cy='20' r='13' fill='none' stroke='url(%23g)' stroke-width='2.6' stroke-dasharray='16.4 4' transform='rotate(-78 20 20)'/%3E%3Cpath d='M20 11l6.5 9-6.5 9-6.5-9z' fill='none' stroke='url(%23g)' stroke-width='2.2'/%3E%3Ccircle cx='20' cy='20' r='2.6' fill='url(%23g)'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="stil.css">
+<script src="tema.js"></script>
+</head>
+<body class="tek-sayfa">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="altin" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffd98a"/><stop offset="1" stop-color="#e3892b"/></linearGradient>
+    <symbol id="muhur" viewBox="0 0 40 40">
+      <circle cx="20" cy="20" r="15" fill="none" stroke="url(#altin)" stroke-width="2.2" stroke-dasharray="19.56 4" transform="rotate(-78 20 20)"/>
+      <path d="M20 9.5l7.4 10.5L20 30.5 12.6 20z" fill="none" stroke="url(#altin)" stroke-width="2"/>
+      <circle cx="20" cy="20" r="2.8" fill="url(#altin)"/>
+    </symbol>
+  </defs>
+</svg>
+<div class="giris">
+  <div class="giris-sahne">
+    <aside class="giris-vitrin">
+      <a class="giris-marka" href="/" style="text-decoration:none;color:inherit"><svg class="muhur"><use href="#muhur"/></svg><span><b>MegscriptVM</b><small>Megliroth Bulutu</small></span></a>
+      <h1>Hesabına <span>güvenle</span> geri dön.</h1>
+      <ul class="vitrin-liste">
+        <li><svg viewBox="0 0 24 24"><path d="M4 6h16v12H4zM4 7l8 6 8-6"/></svg><div><b>Bağlantı e-postana gelir</b><small>30 dakika geçerlidir ve yalnız bir kez kullanılabilir.</small></div></li>
+        <li><svg viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4.5-3 7.8-7 9-4-1.2-7-4.5-7-9V6zM9 12l2 2 4-4"/></svg><div><b>Eski oturumlar kapanır</b><small>Şifre değişince açık kalan bütün oturumlar düşer.</small></div></li>
+        <li><svg viewBox="0 0 24 24"><path d="M7 11V8a5 5 0 0110 0v3M6 11h12v9H6zM12 15v2"/></svg><div><b>Şifren kimseye görünmez</b><small>Tek yönlü özetlenerek saklanır; biz de göremeyiz.</small></div></li>
+      </ul>
+      <small class="vitrin-alt">© Megliroth · MegscriptVM</small>
+    </aside>
+
+    <main class="giris-kart">
+      <!-- 1) e-posta iste -->
+      <section class="giris-adim" data-adim="iste">
+        <div class="giris-mobil-marka"><svg class="muhur"><use href="#muhur"/></svg><b>MegscriptVM</b></div>
+        <h2>Şifreni mi unuttun?</h2>
+        <p class="giris-alt-baslik">Hesabının e-postasını yaz; sana yeni şifre belirleme bağlantısı gönderelim.</p>
+        <form id="isteForm" class="kimlik-form" novalidate>
+          <label class="alan"><span>E-posta</span>
+            <div class="ikon-girdi"><svg viewBox="0 0 24 24"><path d="M4 6h16v12H4zM4 7l8 6 8-6"/></svg><input name="eposta" type="email" autocomplete="email" inputmode="email" spellcheck="false" autocapitalize="off" placeholder="ornek@gmail.com" required></div></label>
+          <p class="hata-metni" id="isteHata" hidden></p>
+          <button type="submit" class="dugme birincil buyuk" id="isteDugme"><span>Sıfırlama bağlantısı gönder</span><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        </form>
+        <p class="gecis-satir">Şifreni hatırladın mı? <a href="/">Oturum aç</a></p>
+        <small class="giris-dip">Google ile kayıt olduysan şifre gerekmez: giriş sayfasında “Google ile oturum aç”ı kullan. İstersen buradan şifre de belirleyebilirsin.</small>
+      </section>
+
+      <!-- 2) gönderildi -->
+      <section class="giris-adim" data-adim="gonderildi" hidden>
+        <div class="bekle-rozet"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" class="bekle-iz"/><path d="M18 24h28v18H18zM18 25l14 10 14-10" fill="none" stroke="var(--koz)" stroke-width="2.4" stroke-linejoin="round"/></svg></div>
+        <h2>E-postanı kontrol et</h2>
+        <p class="giris-alt-baslik"><b id="gonderilenEposta">—</b> adresi kayıtlıysa sıfırlama bağlantısı birkaç dakika içinde gelir. Gelen kutunda yoksa “Spam” ve “Promosyonlar” klasörlerine de bak.</p>
+        <button class="dugme buyuk" id="yenidenGonder"><span>Yeniden gönder</span></button>
+        <p class="gecis-satir"><a href="/">Giriş sayfasına dön</a></p>
+      </section>
+
+      <!-- 3) yeni şifre (bağlantıdan gelince) -->
+      <section class="giris-adim" data-adim="yeni" hidden>
+        <div class="giris-mobil-marka"><svg class="muhur"><use href="#muhur"/></svg><b>MegscriptVM</b></div>
+        <h2>Yeni şifreni belirle</h2>
+        <p class="giris-alt-baslik">En az 8 karakter; harf, rakam ve sembol karıştırırsan daha güçlü olur.</p>
+        <form id="yeniForm" class="kimlik-form" novalidate>
+          <input type="text" name="kullanici" autocomplete="username" hidden>
+          <label class="alan"><span>Yeni şifre</span>
+            <div class="ikon-girdi"><svg viewBox="0 0 24 24"><path d="M7 11V8a5 5 0 0110 0v3M6 11h12v9H6zM12 15v2"/></svg><input name="sifre" type="password" autocomplete="new-password" minlength="8" maxlength="128" placeholder="En az 8 karakter" required><button type="button" class="goz" data-goz aria-label="Şifreyi göster"><svg viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12zM12 15a3 3 0 100-6 3 3 0 000 6z"/></svg></button></div>
+            <div class="sifre-guc" id="sifreGuc" data-seviye="0"><i></i><i></i><i></i><i></i><small>Harf, rakam ve sembol karıştır.</small></div></label>
+          <label class="alan"><span>Yeni şifre (tekrar)</span>
+            <div class="ikon-girdi"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><input name="sifre2" type="password" autocomplete="new-password" maxlength="128" placeholder="Aynı şifreyi yaz" required></div></label>
+          <p class="hata-metni" id="yeniHata" hidden></p>
+          <button type="submit" class="dugme birincil buyuk" id="yeniDugme"><span>Şifremi değiştir</span><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        </form>
+        <p class="gecis-satir"><a href="/sifre" id="yeniBaglanti" hidden>Yeni bağlantı iste</a></p>
+      </section>
+
+      <!-- 4) bitti -->
+      <section class="giris-adim" data-adim="bitti" hidden>
+        <div class="bekle-rozet"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" class="bekle-iz"/><path d="M22 33l7 7 14-15" fill="none" stroke="var(--yesil)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h2>Şifren değişti</h2>
+        <p class="giris-alt-baslik">Giriş yaptın; diğer cihazlardaki eski oturumlar kapatıldı. Panele yönlendiriliyorsun…</p>
+        <a class="dugme birincil buyuk" href="/"><span>Panele git</span></a>
+      </section>
+    </main>
+  </div>
+</div>
+<script src="sifre.js"></script>
+</body>
+</html>
