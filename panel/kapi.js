@@ -1,15 +1,24 @@
-// MegscriptVM panel kapısı: panel bu sitede değil, MegscriptVM'in kendi bilgisayarında çalışır ve dışarıya
-// adresi her açılışta değişen bir tünelle açılır. Bilgisayar her açılışta güncel adresi /adres.json'a yazar;
-// bu betik onu okuyup ziyaretçiyi panele aktarır:
+// MegscriptVM panel kapısı. Panel bu sitede değil, MegscriptVM'in kendi bilgisayarında çalışır ve dışarıya
+// adresi her açılışta değişen bir tünelle açılır; bilgisayar güncel adresi /adres.json'a yazar. Bu betik paneli
+// sayfayı kaplayan bir çerçevede (iframe) açar, böylece adres çubuğunda hep megscriptvm.js.org görünür:
 //   megscriptvm.js.org/            -> <panel>/        (giriş ekranı)
 //   megscriptvm.js.org/panel/...   -> <panel>/...     (e-postadaki bağlantılar: /panel/sifre#t=.., /panel/#yonetim)
-// Sorgu ve #parça aynen taşınır. Panel kapalıysa 15 sn'de bir yeniden dener.
+// Oturum: çerçevede üçüncü taraf çerezi çalışmadığı için oturum jetonu BU sitenin belleğinde (localStorage) durur;
+// panelin gomulu.js'i postMessage ile ister, saklatır ve siler. Yalnız o anki panel kökeniyle konuşulur.
+// Panel kapalıysa 15 sn'de bir yeniden dener.
 (() => {
   const ON = "/panel";
+  const ANAHTAR = "mvm-oturum";
   const y = location.pathname;
   const kok = y === "/" || y === "/index.html";
   if (!(kok || y === ON || y.startsWith(ON + "/"))) return;
   const $ = (id) => document.getElementById(id);
+  const bellek = {
+    al() { try { return localStorage.getItem(ANAHTAR) || ""; } catch (e) { return ""; } },
+    yaz(v) { try { localStorage.setItem(ANAHTAR, v); } catch (e) { /* özel pencere: oturum sayfa ömrü kadar */ } },
+    sil() { try { localStorage.removeItem(ANAHTAR); } catch (e) { /* yok */ } },
+  };
+  let gecici = "";                                   // localStorage yazılamazsa (özel pencere) bu sayfa açıkken
   function hedefYol() {
     let h = kok ? "/" : y.slice(ON.length);
     if (h === "" || h === "/index.html") h = "/";
@@ -25,10 +34,38 @@
     try { await fetch(adres + "/simge.png?t=" + Date.now(), { mode: "no-cors", cache: "no-store", signal: k.signal }); return true; }
     catch (e) { return false; } finally { clearTimeout(z); }
   }
+  function cerceveAc(adres) {
+    const koken = new URL(adres).origin;
+    const s = document.createElement("style");
+    s.textContent = "html,body{margin:0;height:100%;overflow:hidden}#panelCerceve{position:fixed;inset:0;width:100%;height:100%;border:0;display:block;background:#09090d}";
+    document.head.appendChild(s);
+    const f = document.createElement("iframe");
+    f.id = "panelCerceve";
+    f.title = "MegscriptVM Panel";
+    f.allow = "clipboard-write";
+    f.src = adres + hedefYol();
+    window.addEventListener("message", (e) => {
+      if (e.origin !== koken || e.source !== f.contentWindow || !e.data || typeof e.data !== "object") return;
+      const d = e.data;
+      if (d.tur === "mvm-merhaba") f.contentWindow.postMessage({ tur: "mvm-jeton", jeton: bellek.al() || gecici }, koken);
+      else if (d.tur === "mvm-jeton-kaydet" && typeof d.jeton === "string" && d.jeton.length < 2000) { gecici = d.jeton; bellek.yaz(d.jeton); }
+      else if (d.tur === "mvm-jeton-sil") { gecici = ""; bellek.sil(); }
+      else if (d.tur === "mvm-adres") {
+        // adres çubuğu: panelin #parçası (jetonlu parça gelmez). Yenileyince aynı sayfa açılır.
+        const parca = typeof d.parca === "string" && /^#[\w\-\/%.]{0,200}$/.test(d.parca) ? d.parca : "";
+        const yol = d.yol === "/sifre" ? "/panel/sifre" : "/";
+        history.replaceState(null, "", yol + parca);
+        if (typeof d.baslik === "string" && d.baslik) document.title = d.baslik.slice(0, 120);
+      }
+    });
+    // e-postadaki #t=... jetonu çerçeveye geçti; bu sayfanın adres çubuğunda ve geçmişinde kalmasın
+    if (/(^|[#&])t=/.test(location.hash)) history.replaceState(null, "", location.pathname);
+    document.body.replaceChildren(f);
+  }
   async function dene() {
     try {
       const adres = await adresAl();
-      if (adres && await ulasilir(adres)) { location.replace(adres + hedefYol()); return; }
+      if (adres && await ulasilir(adres)) { cerceveAc(adres); return; }
     } catch (e) { /* aşağıda yeniden denenir */ }
     if ($("kapali")) $("kapali").hidden = false;
     if ($("durum")) $("durum").textContent = "Bağlanılamadı; 15 saniye sonra yeniden denenecek.";
