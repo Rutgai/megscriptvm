@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>megscriptvm JavaScript — 404</title>
+<link rel="icon" href="/simge.png">
 <style>
   :root { --zemin:#0b0a0f; --yazi:#efedf5; --soluk:#b9b6c8; --koz:#f2b54a; }
   @media (prefers-color-scheme: light) { :root { --zemin:#f6f3ee; --yazi:#1d1a14; --soluk:#6f6a61; --koz:#c4801f; } }
@@ -13,10 +14,23 @@
 </style>
 </head>
 <body>
-<main>
+<!-- /panel/... yolları (e-postadaki "Şifremi sıfırla", "Panele git" bağlantıları) panele aktarılır; gerisi 404 -->
+<main id="panelKapi" hidden>
+  <h1>MegscriptVM</h1>
+  <p id="durum">Panele bağlanılıyor…</p>
+  <p id="kapali" hidden>Panel şu an kapalı ya da yeniden başlıyor. Sayfa kendiliğinden yeniden dener.</p>
+</main>
+<main id="yok">
   <h1>404</h1>
   <p>Bu sayfa bulunamadı. / Page not found.</p>
-  <p><a href="/">megscriptvm JavaScript kütüphanesi / library</a></p>
+  <p><a href="/">megscriptvm JavaScript kütüphanesi / library</a> · <a href="/panel/">MegscriptVM Panel</a></p>
 </main>
+<script>
+  if (location.pathname === "/panel" || location.pathname.startsWith("/panel/")) {
+    document.getElementById("panelKapi").hidden = false;
+    document.getElementById("yok").hidden = true;
+  }
+</script>
+<script src="/panel/kapi.js"></script>
 </body>
 </html>
