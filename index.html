@@ -2,162 +2,40 @@
 <html lang="tr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="dark light">
-<meta name="description" content="megscriptvm: JavaScript library for megscript and MegscriptVM — API client with real-time player count, tokenizer, syntax highlighter and TR/EN translation.">
-<title>megscriptvm JavaScript</title>
-<link rel="stylesheet" href="stil.css">
-<script src="tema.js"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MegscriptVM Panel</title>
+<meta name="description" content="MegscriptVM paneline yönlendirme: megscript kodunu yaz, sunucun 7/24 çalışsın.">
+<link rel="icon" href="/simge.png">
 <style>
-  /* stil.css yoksa da koyu tema: yedek değerler */
-  :root {
-    --zemin: #0b0a0f; --zemin-2: #0f0e15; --yazi: #efedf5; --yazi-2: #b9b6c8; --koz: #f2b54a;
-    --koz-ince: rgba(242, 181, 74, .12); --koz-cizgi: rgba(242, 181, 74, .35);
-    --yazi-tipi: "Segoe UI Variable Text", "Segoe UI", "Inter", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
-  }
-  body { background: var(--zemin); color: var(--yazi); font-family: var(--yazi-tipi); margin: 0; }
-  .kd { max-width: 980px; margin: 0 auto; padding: 32px 16px 64px; }
-  .kd header { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-  .kd h1 { font-size: clamp(26px, 4vw, 38px); margin: 8px 0 4px; letter-spacing: -.01em; }
-  .kd h1 span { color: var(--koz); }
-  .kd h2 { font-size: 20px; margin: 40px 0 10px; }
-  .kd p, .kd li { color: var(--yazi-2); line-height: 1.6; }
-  .kd .en { font-size: 14px; opacity: .85; }
-  .kd a { color: var(--koz); }
-  .kd pre, .kd code, .kd textarea, .kd .onizleme { font-family: ui-monospace, "Cascadia Code", Consolas, monospace; font-size: 13.5px; }
-  .kd pre { background: var(--zemin-2); border: 1px solid var(--koz-cizgi); border-radius: 10px; padding: 14px 16px; overflow-x: auto; color: var(--yazi); }
-  .kd code { color: var(--koz); }
-  .kd pre code { color: inherit; }
-  .kd table { width: 100%; border-collapse: collapse; font-size: 14px; }
-  .kd th, .kd td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--koz-ince); vertical-align: top; }
-  .kd th { color: var(--yazi); }
-  .kd td { color: var(--yazi-2); }
-  .deneme { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  @media (max-width: 760px) { .deneme { grid-template-columns: 1fr; } }
-  .deneme textarea, .deneme .onizleme { width: 100%; min-height: 300px; box-sizing: border-box; background: var(--zemin-2); color: var(--yazi);
-    border: 1px solid var(--koz-cizgi); border-radius: 10px; padding: 12px 14px; white-space: pre; overflow: auto; line-height: 1.5; resize: vertical; margin: 0; }
-  .araclar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin: 10px 0; }
-  .araclar button { background: var(--koz-ince); color: var(--yazi); border: 1px solid var(--koz-cizgi); border-radius: 8px; padding: 7px 12px; cursor: pointer; font: inherit; }
-  .araclar button:hover { border-color: var(--koz); }
-  .araclar small { color: var(--yazi-2); }
-  .ms-anahtar { color: var(--koz); font-weight: 600; }
-  .ms-oznitelik { color: #c9a0ff; }
-  .ms-metin, .ms-run { color: #8fd4a0; }
-  .ms-ifade { color: var(--yazi); }
-  .ms-kacis { color: #f39b6b; }
-  .ms-sayi { color: #7fb8ff; }
-  .ms-yorum, .ms-imza { color: #7d7a8c; font-style: italic; }
-  .ms-islec { color: #e3c47a; }
-  .ms-hata { color: #ff6b6b; text-decoration: underline wavy; }
+  :root { --zemin:#09090d; --kart:#14131a; --cizgi:#2a2733; --yazi:#e8e2d6; --soluk:#9a948a; --altin:#f2b54a; }
+  @media (prefers-color-scheme: light) { :root { --zemin:#f6f3ee; --kart:#ffffff; --cizgi:#e4ded3; --yazi:#1d1a14; --soluk:#6f6a61; --altin:#c4801f; } }
+  * { box-sizing:border-box; }
+  body { margin:0; min-height:100vh; display:grid; place-items:center; padding:16px; background:var(--zemin);
+         background-image:radial-gradient(ellipse at top, rgba(242,181,74,.14), transparent 60%);
+         color:var(--yazi); font:15px/1.6 "Segoe UI",Roboto,Helvetica,Arial,sans-serif; }
+  .kart { width:100%; max-width:420px; background:var(--kart); border:1px solid var(--cizgi); border-radius:20px;
+          padding:32px 28px; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,.25); }
+  img { width:64px; height:64px; }
+  h1 { margin:12px 0 4px; font-size:24px; }
+  p { margin:0; color:var(--soluk); }
+  .doner { width:28px; height:28px; margin:22px auto 12px; border:3px solid var(--cizgi); border-top-color:var(--altin);
+           border-radius:50%; animation:don 0.9s linear infinite; }
+  @keyframes don { to { transform:rotate(360deg); } }
+  .kapali { margin-top:16px; padding:12px 14px; border-radius:12px; border:1px solid var(--cizgi); font-size:13px; }
+  a { color:var(--altin); }
+  small { display:block; margin-top:22px; font-size:12px; color:var(--soluk); }
 </style>
 </head>
 <body>
-<main class="kd">
-  <header>
-    <div>
-      <p><a href="https://github.com/Rutgai/megscriptvm">GitHub</a> · <a href="#kullanim">Kullanım / Usage</a> ·
-        <a href="/panel/"><b>MegscriptVM Panel →</b></a></p>
-      <h1><span>megscriptvm</span> JavaScript kütüphanesi</h1>
-      <p>megscript ve MegscriptVM için bağımlılıksız JavaScript araçları: sunucuları koddan yöneten <b>API istemcisi</b>
-        (gerçek zamanlı oyuncu sayısı dahil) ve megscript kodu için <b>tokenlayıcı, renklendirici ve TR/EN çevirici</b>.
-        Tarayıcıda ve Node 18+'da çalışır.</p>
-      <p class="en">Zero-dependency JavaScript tools for megscript and MegscriptVM: an API client to create, run and watch
-        servers (with a real-time player count) and a tokenizer, syntax highlighter and Turkish/English translator for
-        megscript code. Works in browsers and Node 18+. ES modules, no build step.</p>
-    </div>
-  </header>
-
-  <h2>Dene / Try it</h2>
-  <p>Soldaki megscript kodunu değiştir; sağda renklendirilmiş hâli görünür. Çeviri düğmeleri tanımlayıcılara ve metinlere
-    dokunmadan yalnız anahtar kelimeleri çevirir. Sonuç, derleyicinin <code>megc --biçimle --dil</code> çıktısıyla aynıdır.</p>
-  <div class="araclar">
-    <button type="button" data-dil="en">English</button>
-    <button type="button" data-dil="tr">Türkçe</button>
-    <small id="durum">Demo yüklenemedi: sayfa dosyadan (file://) açıldıysa tarayıcı JavaScript modüllerini yüklemez; siteden aç.</small>
-  </div>
-  <div class="deneme">
-    <textarea id="kaynak" spellcheck="false" aria-label="megscript kaynak kodu">--! lang=tr
--- oyun sunucusu: oyuncular girince MegscriptVM paneline bildirir
-âleme_bağla mcore.ağ
-
-ayin oturum(bağ, oyuncular) ~>
-    çağır ad = bağ.satır_al()
-    oyuncular.ekle(ad)
-    sistem.oyuncular(oyuncular)          -- panelde gerçek oyuncu sayısı
-    yayınla(~^ad katıldı (^(uzunluk(oyuncular)) oyuncu)~)
-| ayin
-
-ayin m() ~>
-    çağır sunucu = ağ.dinle(25565)
-    çağır oyuncular = []
-    iken gerçek ~>
-        doğur oturum(sunucu.kabul(), oyuncular)
-    |
-| ayin</textarea>
-    <pre class="onizleme" id="onizleme" aria-live="polite"></pre>
-  </div>
-
-  <h2 id="kullanim">Kullanım / Usage</h2>
-  <pre><code>import { MegscriptVM, renklendir, cevir, tokenla } from "https://megscriptvm.js.org/megscriptvm-js/index.js";
-
-// Yerel MegscriptVM konsolu (http://localhost:8090); "" = aynı köken
-const vm = new MegscriptVM({ adres: "http://localhost:8090" });
-await vm.olustur({ ad: "lobi", kod, port: 25565, kademe: 2 });
-
-// Gerçek zamanlı oyuncu sayısı: değişince çağrılır (sekmeye dönünce de hemen yenilenir)
-const durdur = vm.oyunculariIzle("lobi", ({ sayi, adlar, kaynak }) =&gt; {
-  console.log(`${sayi} oyuncu (${kaynak})`, adlar);
-});
-
-// megscript kodu: renklendir, dile çevir
-element.innerHTML = renklendir(kaynak);       // güvenli HTML (kaçışlı)
-const ingilizce = cevir(kaynak, "en");        // megc --biçimle --dil=en ile aynı</code></pre>
-
-  <h2>API istemcisi / API client</h2>
-  <table>
-    <tr><th>Yöntem</th><th>Ne yapar</th></tr>
-    <tr><td><code>new MegscriptVM({ adres, fetch })</code></td><td>Konsola bağlanır. <code>adres</code> boşsa aynı köken.</td></tr>
-    <tr><td><code>ozet()</code></td><td>Çalışan / toplam sunucu, toplam bellek, toplam oyuncu, ana makine kademesi, olaylar.</td></tr>
-    <tr><td><code>sunucular()</code>, <code>sunucu(ad)</code></td><td>Sunucu kayıtları: durum, kademe, port, bellek, oyuncular.</td></tr>
-    <tr><td><code>olustur({ ad, kod, port, kademe, islemci, politika, not, otomatik, baslat })</code></td><td>megscript kodundan sunucu kurar (hazır şablon yok).</td></tr>
-    <tr><td><code>guncelle(ad, ayarlar)</code></td><td>Kodu ya da ayarları değiştirir.</td></tr>
-    <tr><td><code>baslat(ad)</code>, <code>yeniden(ad)</code>, <code>durdur(ad)</code>, <code>sil(ad)</code></td><td>Sunucu yaşam döngüsü.</td></tr>
-    <tr><td><code>otomatik(ad, acik)</code></td><td>Bekçi: çökerse yeniden başlatılsın mı.</td></tr>
-    <tr><td><code>kod(ad)</code>, <code>gunluk(ad, n)</code></td><td>Kaynak kodu ve son günlük satırları.</td></tr>
-    <tr><td><code>oyuncular(ad)</code></td><td><code>{ sayi, adlar, kaynak, tepe }</code>. <code>kaynak</code>: <code>"sunucu"</code> (gerçek, <code>sistem.oyuncular</code> ile bildirildi) ya da <code>"tahmini"</code>.</td></tr>
-    <tr><td><code>oyunculariIzle(ad, geriCagri, { aralik })</code></td><td>Oyuncu listesi değişince bildirir; durduran işlev döner.</td></tr>
-  </table>
-  <p>Hatalar <code>MegscriptVMHatasi</code> olarak gelir: <code>durum</code> (HTTP kodu, ağ hatasında 0) ve <code>veri</code> (konsolun yanıtı).</p>
-
-  <h2>Sözdizimi araçları / Syntax tools</h2>
-  <table>
-    <tr><th>İşlev</th><th>Ne yapar</th></tr>
-    <tr><td><code>tokenla(kaynak)</code></td><td>Kaynağın tamamını kapsayan tokenlar (boşluklar dahil): anahtar, ad, metin (<code>^( … )</code> ifadeleriyle), sayı, yorum, işleç, öznitelik.</td></tr>
-    <tr><td><code>renklendir(kaynak, { onek })</code></td><td>Güvenli HTML; sınıflar <code>ms-anahtar</code>, <code>ms-metin</code>, <code>ms-yorum</code> …</td></tr>
-    <tr><td><code>dilBul(kaynak)</code></td><td><code>"tr"</code>, <code>"en"</code> ya da <code>null</code> (imza ya da ilk anahtar kelime).</td></tr>
-    <tr><td><code>cevir(kaynak, "tr" | "en")</code></td><td>Dosyayı öbür dile çevirir; derleyicinin <code>megc --biçimle --dil</code> çıktısıyla birebir.</td></tr>
-    <tr><td><code>standartYazim(tur, dil)</code>, <code>ANAHTAR_KELIMELER</code></td><td>Derleyicinin anahtar kelime tablosu (kaynağından otomatik üretilir).</td></tr>
-  </table>
-
-  <h2>Doğruluk / Correctness</h2>
-  <p>Anahtar kelime tablosu derleyicinin kaynağından üretilir ve sınamalarda güncelliği denetlenir. Tokenlayıcı ve çevirici,
-    megscript deposundaki her örnek dosyada derleyiciyle karşılaştırılarak sınanır.</p>
+<main class="kart">
+  <img src="/simge.png" alt="">
+  <h1>MegscriptVM</h1>
+  <p>Kodunu yaz, sunucun 7/24 çalışsın.</p>
+  <div class="doner"></div>
+  <p id="durum">Panele bağlanılıyor…</p>
+  <div class="kapali" id="kapali" hidden>Panel şu an kapalı ya da yeniden başlıyor. Sayfa kendiliğinden yeniden dener.</div>
+  <small><a href="/js.html">megscriptvm JavaScript kütüphanesi</a> · © MegscriptStudio</small>
 </main>
-<script type="module">
-  import { renklendir, cevir, dilBul } from "./megscriptvm-js/index.js";
-  const k = document.getElementById("kaynak"), o = document.getElementById("onizleme"), d = document.getElementById("durum");
-  const ciz = () => {
-    o.innerHTML = renklendir(k.value);
-    const dil = dilBul(k.value);
-    d.textContent = dil ? `dil: ${dil === "tr" ? "Türkçe" : "English"}` : "dil: belirsiz";
-  };
-  k.addEventListener("input", ciz);
-  k.addEventListener("scroll", () => { o.scrollTop = k.scrollTop; o.scrollLeft = k.scrollLeft; });
-  document.querySelectorAll("[data-dil]").forEach((b) => b.addEventListener("click", () => {
-    try { k.value = cevir(k.value, b.dataset.dil); ciz(); }
-    catch (e) { d.textContent = e.message; }
-  }));
-  ciz();
-</script>
+<script src="/panel/kapi.js"></script>
 </body>
 </html>

@@ -1,15 +1,19 @@
 // MegscriptVM panel kapısı: panel bu sitede değil, MegscriptVM'in kendi bilgisayarında çalışır ve dışarıya
 // adresi her açılışta değişen bir tünelle açılır. Bilgisayar her açılışta güncel adresi /adres.json'a yazar;
-// bu betik onu okuyup /panel/... yolunu, sorguyu ve #parçayı panele aynen aktarır
-// (ör. /panel/sifre#t=.. -> <panel>/sifre#t=..). Panel kapalıysa 15 sn'de bir yeniden dener.
+// bu betik onu okuyup ziyaretçiyi panele aktarır:
+//   megscriptvm.js.org/            -> <panel>/        (giriş ekranı)
+//   megscriptvm.js.org/panel/...   -> <panel>/...     (e-postadaki bağlantılar: /panel/sifre#t=.., /panel/#yonetim)
+// Sorgu ve #parça aynen taşınır. Panel kapalıysa 15 sn'de bir yeniden dener.
 (() => {
   const ON = "/panel";
-  if (!(location.pathname === ON || location.pathname.startsWith(ON + "/"))) return;
+  const y = location.pathname;
+  const kok = y === "/" || y === "/index.html";
+  if (!(kok || y === ON || y.startsWith(ON + "/"))) return;
   const $ = (id) => document.getElementById(id);
   function hedefYol() {
-    let y = location.pathname.slice(ON.length);
-    if (y === "" || y === "/index.html") y = "/";
-    return y + location.search + location.hash;
+    let h = kok ? "/" : y.slice(ON.length);
+    if (h === "" || h === "/index.html") h = "/";
+    return h + location.search + location.hash;
   }
   async function adresAl() {
     const r = await fetch("/adres.json?t=" + Date.now(), { cache: "no-store" });

@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="stil.css">
 <script src="tema.js"></script>
 <style>
-  /* stil.css yoksa da (sayfa tek başına açılınca) panelin koyu teması: yedek değerler */
+  /* stil.css yoksa da koyu tema: yedek değerler */
   :root {
     --zemin: #0b0a0f; --zemin-2: #0f0e15; --yazi: #efedf5; --yazi-2: #b9b6c8; --koz: #f2b54a;
     --koz-ince: rgba(242, 181, 74, .12); --koz-cizgi: rgba(242, 181, 74, .35);
@@ -55,7 +55,8 @@
 <main class="kd">
   <header>
     <div>
-      <p><a href="./">← MegscriptVM paneli</a></p>
+      <p><a href="https://github.com/Rutgai/megscriptvm">GitHub</a> · <a href="#kullanim">Kullanım / Usage</a> ·
+        <a href="/"><b>MegscriptVM Panel →</b></a></p>
       <h1><span>megscriptvm</span> JavaScript kütüphanesi</h1>
       <p>megscript ve MegscriptVM için bağımlılıksız JavaScript araçları: sunucuları koddan yöneten <b>API istemcisi</b>
         (gerçek zamanlı oyuncu sayısı dahil) ve megscript kodu için <b>tokenlayıcı, renklendirici ve TR/EN çevirici</b>.
@@ -96,10 +97,10 @@ ayin m() ~>
     <pre class="onizleme" id="onizleme" aria-live="polite"></pre>
   </div>
 
-  <h2>Kullanım / Usage</h2>
+  <h2 id="kullanim">Kullanım / Usage</h2>
   <pre><code>import { MegscriptVM, renklendir, cevir, tokenla } from "https://megscriptvm.js.org/megscriptvm-js/index.js";
 
-// Yerel konsol (MegscriptVM, http://localhost:8090) ya da panel içinden ("" = aynı köken)
+// Yerel MegscriptVM konsolu (http://localhost:8090); "" = aynı köken
 const vm = new MegscriptVM({ adres: "http://localhost:8090" });
 await vm.olustur({ ad: "lobi", kod, port: 25565, kademe: 2 });
 
@@ -115,7 +116,7 @@ const ingilizce = cevir(kaynak, "en");        // megc --biçimle --dil=en ile ay
   <h2>API istemcisi / API client</h2>
   <table>
     <tr><th>Yöntem</th><th>Ne yapar</th></tr>
-    <tr><td><code>new MegscriptVM({ adres, fetch })</code></td><td>Konsola bağlanır. <code>adres</code> boşsa aynı köken (panel içi).</td></tr>
+    <tr><td><code>new MegscriptVM({ adres, fetch })</code></td><td>Konsola bağlanır. <code>adres</code> boşsa aynı köken.</td></tr>
     <tr><td><code>ozet()</code></td><td>Çalışan / toplam sunucu, toplam bellek, toplam oyuncu, ana makine kademesi, olaylar.</td></tr>
     <tr><td><code>sunucular()</code>, <code>sunucu(ad)</code></td><td>Sunucu kayıtları: durum, kademe, port, bellek, oyuncular.</td></tr>
     <tr><td><code>olustur({ ad, kod, port, kademe, islemci, politika, not, otomatik, baslat })</code></td><td>megscript kodundan sunucu kurar (hazır şablon yok).</td></tr>
